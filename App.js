@@ -18,10 +18,10 @@ export default function App() {
     <NavigationContainer>
       <UtilsContext.Provider value={{ utils, setUtils }}>
         <Stack.Navigator>
-          <Stack.Screen name="Condominio" component={Condominio} />
-          <Stack.Screen name="Funcionarios" component={Funcionarios} />
-          <Stack.Screen name="Moradores" component={Moradores} />
-          <Stack.Screen name="Visitantes" component={Visitantes} />
+          <Stack.Screen name="Condominio" options={{headerShown: false}} component={Condominio} />
+          <Stack.Screen name="Funcionarios" options={{headerShown: false}} component={Funcionarios} />
+          <Stack.Screen name="Moradores" options={{headerShown: false}} component={Moradores} />
+          <Stack.Screen name="Visitantes" options={{headerShown: false}} component={Visitantes} />
         </Stack.Navigator>
       </UtilsContext.Provider>
     </NavigationContainer>
