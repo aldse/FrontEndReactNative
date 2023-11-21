@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Text, Image, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { UtilsContext } from "./context";
 
-export default function Funcionarios(props) {
+export default function CoisasCondominio(props) {
     const { setUtils } = useContext(UtilsContext);
 
     const voltarCondominio = () => {
@@ -18,8 +18,8 @@ export default function Funcionarios(props) {
                 source={require('./logoapenas.png')}  
                 style={styles.logo}
             />
-            <Text style={styles.titulo}>Funcionários</Text>
-            <Text style={styles.descricao}>Bem-vindo à tela de funcionários!</Text>
+            <Text style={styles.titulo}>Condominio</Text>
+            <Text style={styles.descricao}>Bem-vindo à tela de Condominio!</Text>
         </View>
     );
 }

@@ -11,9 +11,10 @@ import TELA2 from './2.png';
 import TELA3 from './3.png';
 import TELA4 from './4.png';
 import logonome from './logonome.png';
+import { useContext, useState } from 'react'
+import { UtilsContext } from "./context";
 
-
-const Condominio = (props) => {
+export const Condominio = (props) => {
     return (
         <View style={styles.container}>
 
@@ -27,13 +28,13 @@ const Condominio = (props) => {
             />
             <View style={styles.topRow}>
                 <View style={styles.v1}>
-                    <TouchableOpacity style={styles.telaTouchable}>
+                    <TouchableOpacity  onPress={() => props.navigation.navigate("Moradores")} style={styles.telaTouchable}>
                         <Image source={TELA1} style={styles.telaImage} />
                     </TouchableOpacity>
                 </View>
                 <View style={{ marginLeft: 10 }}></View>
                 <View style={styles.v2}>
-                    <TouchableOpacity style={styles.telaTouchable}>
+                    <TouchableOpacity onPress={() => props.navigation.navigate("Visitantes")} style={styles.telaTouchable}>
                         <Image source={TELA2} style={styles.telaImage} />
                     </TouchableOpacity>
                 </View>
@@ -41,13 +42,13 @@ const Condominio = (props) => {
 
             <View style={styles.bottomRow}>
                 <View style={styles.v3}>
-                    <TouchableOpacity style={styles.telaTouchable}>
+                    <TouchableOpacity onPress={() => props.navigation.navigate("Funcionarios")} style={styles.telaTouchable}>
                         <Image source={TELA3} style={styles.telaImage} />
                     </TouchableOpacity>
                 </View>
                 <View style={{ marginLeft: 10 }}></View>
                 <View style={styles.v4}>
-                    <TouchableOpacity style={styles.telaTouchable}>
+                    <TouchableOpacity onPress={() => props.navigation.navigate("CoisasCondominio")} style={styles.telaTouchable}>
                         <Image source={TELA4} style={styles.telaImage} />
                     </TouchableOpacity>
                 </View>
@@ -168,4 +169,3 @@ const styles = StyleSheet.create({
 });
 
 export default Condominio;
-

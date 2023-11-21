@@ -1,15 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react'
-import { UtilsContext } from './Context';
+import { UtilsContext } from './context';
 import { StyleSheet, Text  } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
-import Condominio from './Condominio';
+import {Condominio} from './Condominio';
 import Funcionarios from './Funcionarios';
 import Moradores from './Moradores';
 import Visitantes from './Visitantes';
+import CoisasCondominio from './CoisasCondominio';
+
+import {Provider} from 'react-native-paper';
 
 export default function App() {
   const [utils, setUtils] = useState({users:[]})
@@ -17,12 +20,16 @@ export default function App() {
   return (
     <NavigationContainer>
       <UtilsContext.Provider value={{ utils, setUtils }}>
-        <Stack.Navigator>
+      <Provider>
+      <Stack.Navigator>
           <Stack.Screen name="Condominio" options={{headerShown: false}} component={Condominio} />
+          <Stack.Screen name="CoisasCondominio" options={{headerShown: false}} component={CoisasCondominio} />
           <Stack.Screen name="Funcionarios" options={{headerShown: false}} component={Funcionarios} />
           <Stack.Screen name="Moradores" options={{headerShown: false}} component={Moradores} />
           <Stack.Screen name="Visitantes" options={{headerShown: false}} component={Visitantes} />
         </Stack.Navigator>
+      </Provider>
+        
       </UtilsContext.Provider>
     </NavigationContainer>
   );
