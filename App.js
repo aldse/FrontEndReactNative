@@ -11,6 +11,7 @@ import Funcionarios from './Funcionarios';
 import Moradores from './Moradores';
 import Visitantes from './Visitantes';
 import CoisasCondominio from './CoisasCondominio';
+import Cadastro from './Cadastro';
 
 import {Provider} from 'react-native-paper';
 
@@ -27,6 +28,7 @@ export default function App() {
           <Stack.Screen name="Funcionarios" options={{headerShown: false}} component={Funcionarios} />
           <Stack.Screen name="Moradores" options={{headerShown: false}} component={Moradores} />
           <Stack.Screen name="Visitantes" options={{headerShown: false}} component={Visitantes} />
+          <Stack.Screen name="Cadastro" options={{headerShown: false}} component={Cadastro} />
         </Stack.Navigator>
       </Provider>
         
