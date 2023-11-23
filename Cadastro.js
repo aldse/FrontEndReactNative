@@ -1,25 +1,71 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import Logo from './logo.png';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Picker, Modal, } from 'react-native';
+import Logo from './logoapenas.png';
+import voltar from './voltar.png';
 
 const Cadastro = ({ navigation }) => {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [numeroCofre, setNumeroCofre] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [tipoUsuario, setTipoUsuario] = useState('morador');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [senhaIncorreta, setSenhaIncorreta] = useState(false);
+  const senhaRef = useRef('');
 
   const handleSubmit = () => {
-    // Aqui você pode adicionar a lógica para enviar os dados do formulário
     console.log('Nome:', nome);
     console.log('E-mail:', email);
     console.log('Senha:', senha);
-    console.log('Número do Cofre:', numeroCofre);
+    console.log('Cpf:', cpf);
+    console.log('Tipo de Usuário:', tipoUsuario);
+
+    if (tipoUsuario === 'condominio' && senha !== '000') {
+      setModalVisible(true);
+    } else {
+      navigation.navigate('Condominio', { nome, email, senha, cpf, tipoUsuario });
+    }
+  };
+
+  const handleTipoUsuarioChange = (itemValue) => {
+    setSenha('');
+    setTipoUsuario(itemValue);
+    if (itemValue === 'condominio') {
+      setModalVisible(true);
+    }
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+    if (tipoUsuario === 'condominio' && senhaRef.current === '000') {
+      setTimeout(() => {
+        setTipoUsuario('condominio');
+      }, 3000);
+    } else {
+      setSenhaIncorreta(false);
+      setTipoUsuario('morador');
+    }
+  };
+
+  const handleModalOK = () => {
+    if (senhaRef.current === '000') {
+      setTimeout(() => {
+        setModalVisible(false);
+      }, 1000);
+    } else {
+      setSenhaIncorreta(true);
+      setTimeout(() => {
+        setSenhaIncorreta(false);
+        setTipoUsuario('morador');
+        setModalVisible(false);
+      }, 2000);
+    }
   };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.voltarButton}>
-        <Text style={styles.voltarButtonText}>Voltar</Text>
+        <Image source={voltar} style={styles.voltar} />
       </TouchableOpacity>
 
       <Image source={Logo} style={styles.logo} />
@@ -45,36 +91,79 @@ const Cadastro = ({ navigation }) => {
         style={styles.input}
         placeholder="Senha"
         value={senha}
-        onChangeText={(text) => setSenha(text)}
+        onChangeText={(text) => {
+          setSenha(text);
+          senhaRef.current = text;
+        }}
         secureTextEntry
       />
 
       <TextInput
         style={styles.input}
-        placeholder="Número do Cofre"
-        value={numeroCofre}
-        onChangeText={(text) => setNumeroCofre(text)}
+        placeholder="Cpf"
+        value={cpf}
+        onChangeText={(text) => setCpf(text)}
       />
+
+      <Picker
+        selectedValue={tipoUsuario}
+        style={styles.input}
+        onValueChange={handleTipoUsuarioChange}
+      >
+        <Picker.Item label="Morador" value="morador" />
+        <Picker.Item label="Funcionário" value="funcionario" />
+        <Picker.Item label="Visitante" value="visitante" />
+        <Picker.Item label="Adm Condomínio" value="condominio" />
+      </Picker>
 
       <TouchableOpacity style={styles.botao} onPress={handleSubmit}>
         <Text style={styles.textoBotao}>Cadastrar</Text>
       </TouchableOpacity>
+
+      {/* Modal para senha de Adm Condomínio */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleModalClose}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Digite a senha para Adm Condomínio:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Senha"
+              value={senha}
+              onChangeText={(text) => {
+                setSenha(text);
+                senhaRef.current = text;
+              }}
+              secureTextEntry
+            />
+            <TouchableOpacity style={styles.botao} onPress={handleModalOK}>
+              <Text style={styles.textoBotao}>OK</Text>
+            </TouchableOpacity>
+            {senhaIncorreta && senha !== '000' && (
+              <Text style={styles.senhaIncorretaText}>
+                Senha incorreta, tente novamente.
+              </Text>
+            )}
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
+  voltar: {
+    width: 35,
+    height: 35
+  },
   voltarButton: {
     position: 'absolute',
-    top: 10,
-    right: 10,
-    backgroundColor: '#B28051',
-    borderRadius: 5,
-    padding: 10,
-  },
-  voltarButtonText: {
-    color: 'white',
-    fontSize: 16,
+    top: 0,
+    right: 0,
+    margin: 16,
   },
   container: {
     flex: 1,
@@ -83,12 +172,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: 75,
-    height: 65,
+    width: 55,
+    height: 45,
     position: 'absolute',
     top: 0,
     left: 0,
-    margin: 6,
+    margin: 6
   },
   titulo: {
     fontSize: 24,
@@ -113,6 +202,27 @@ const styles = StyleSheet.create({
   textoBotao: {
     color: 'white',
     fontSize: 18,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  senhaIncorretaText: {
+    color: 'red',
+    marginTop: 10,
   },
 });
 

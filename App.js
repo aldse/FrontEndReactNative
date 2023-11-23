@@ -12,6 +12,7 @@ import Moradores from './Moradores';
 import Visitantes from './Visitantes';
 import CoisasCondominio from './CoisasCondominio';
 import Cadastro from './Cadastro';
+import Login from './Login';
 
 import {Provider} from 'react-native-paper';
 
@@ -29,6 +30,7 @@ export default function App() {
           <Stack.Screen name="Moradores" options={{headerShown: false}} component={Moradores} />
           <Stack.Screen name="Visitantes" options={{headerShown: false}} component={Visitantes} />
           <Stack.Screen name="Cadastro" options={{headerShown: false}} component={Cadastro} />
+          <Stack.Screen name="Login" options={{headerShown: false}} component={Login} />
         </Stack.Navigator>
       </Provider>
         
