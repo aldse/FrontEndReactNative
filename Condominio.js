@@ -89,7 +89,7 @@ export const Condominio = (props) => {
         style={styles.logonome}
       />
 
-<View style={styles.topRow}>
+      <View style={styles.topRow}>
         <View style={styles.v1}>
           <TouchableOpacity onPress={() => handleOptionPress("morador")} style={styles.telaTouchable}>
             <Image source={TELA1} style={styles.telaImage} />
@@ -142,25 +142,42 @@ export const Condominio = (props) => {
               secureTextEntry
             />
             <TouchableOpacity style={styles.voltarButton} onPress={handleModalClose}>
-            <Image
-                    source={voltar}
-                    style={styles.voltar}
-                />
+              <Image
+                source={voltar}
+                style={styles.voltar}
+              />
             </TouchableOpacity>
             <View style={styles.emvolta}>
-            <View style={styles.ret}>
-            <Image source={LogoM} style={styles.logoFooterM1} />
-            <TouchableOpacity style={styles.botao} onPress={handleLogin}>
-              <Text style={styles.textoBotaoM}>Entrar</Text>
-            </TouchableOpacity>
-            <Image source={LogoM2} style={styles.logoFooterM2} />
-            {mensagemErro ? <Text style={styles.mensagemErro}>{mensagemErro}</Text> : null}
-            {loading && <ActivityIndicator size="large" color="#0000ff" />}
-            </View>
+              <View style={styles.ret}>
+                <Image source={LogoM} style={styles.logoFooterM1} />
+                <TouchableOpacity style={styles.botao} onPress={handleLogin}>
+                  <Text style={styles.textoBotaoM}>Entrar</Text>
+                </TouchableOpacity>
+                <Image source={LogoM2} style={styles.logoFooterM2} />
+                {mensagemErro ? <Text style={styles.mensagemErro}>{mensagemErro}</Text> : null}
+                {loading && <ActivityIndicator size="large" color="#0000ff" />}
+              </View>
             </View>
           </View>
         </View>
       </Modal>
+
+
+      <View style={styles.rowOfButtons}>
+        <TouchableOpacity onPress={() => props.navigation.navigate("Moradores")} style={[styles.button, { backgroundColor: '#FF5733' }]}>
+          <Text style={styles.buttonText}>Morador</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => props.navigation.navigate("Visitantes")} style={[styles.button, { backgroundColor: '#33FF57' }]}>
+          <Text style={styles.buttonText}>Visitante</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => props.navigation.navigate("Funcionarios")} style={[styles.button, { backgroundColor: '#5733FF' }]}>
+          <Text style={styles.buttonText}>Funcionário</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => props.navigation.navigate("CoisasCondominio")} style={[styles.button, { backgroundColor: '#33B5FF' }]}>
+          <Text style={styles.buttonText}>Condomínio</Text>
+        </TouchableOpacity>
+      </View>
+
 
       <View style={styles.footer}>
         <View style={styles.retangulo}>
@@ -173,21 +190,27 @@ export const Condominio = (props) => {
       </View>
 
     </View>
-    
+
   );
 };
 
 const styles = StyleSheet.create({
+  rowOfButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginTop: 10,
+  },
   voltar: {
     width: 25,
     height: 25
-},
-voltarButton: {
+  },
+  voltarButton: {
     position: 'absolute',
     top: 20,
     left: 20,
     zIndex: 1,
-},
+  },
   cadastroButton: {
     position: 'absolute',
     top: 10,
@@ -251,11 +274,11 @@ voltarButton: {
     alignItems: 'center',
     overflow: 'hidden',
   },
-  emvolta:{
+  emvolta: {
 
-    
+
   },
-  ret:{
+  ret: {
     borderColor: '#3F3A35',
     borderWidth: 2,
     width: 145,
@@ -375,7 +398,7 @@ voltarButton: {
     color: 'red',
     marginTop: 10,
   },
-  textoBotaoM:{
+  textoBotaoM: {
     fontSize: 15,
     fontWeight: 'bold'
   },

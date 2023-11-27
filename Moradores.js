@@ -12,14 +12,9 @@ export default function Moradores(props) {
     const { setUtils } = useContext(UtilsContext);
     const [formData, setFormData] = useState({
         vagaReservada: '',
-        quantidadeApartamentos: 0,
-        blocos: 0,
         custoCondominio: '',
         reservaChurrasqueira: false,
-        agendamentoAssembleia: false,
-        agendamentoColetaLixo: false,
         denunciasIrregularidades: '',
-        realizarEleicoes: false,
         gerarBoletos: false,
     });
 
@@ -108,7 +103,7 @@ export default function Moradores(props) {
                     </View>
                 </SafeAreaProvider>
 
-                <Text style={styles.formLabel}>Agendamento de assembleias de condomínios</Text>
+                {/* <Text style={styles.formLabel}>Agendamento de assembleias de condomínios</Text>
                 <PaperButton style={styles.paper} onPress={toggleModal1}><Text style={styles.textagendar}>Agendar</Text></PaperButton>
 
                 <Portal>
@@ -149,9 +144,9 @@ export default function Moradores(props) {
 
                         </View>
                     </Modal>
-                </Portal>
+                </Portal> */}
 
-                <Text style={styles.formLabel}>Agendamento para a coleta de lixo</Text>
+                {/* <Text style={styles.formLabel}>Agendamento para a coleta de lixo</Text>
                 <PaperButton style={styles.paper} onPress={toggleModal2}><Text style={styles.textagendar}>Agendar</Text></PaperButton>
 
                 <Portal>
@@ -192,7 +187,7 @@ export default function Moradores(props) {
 
                         </View>
                     </Modal>
-                </Portal>
+                </Portal> */}
 
                 <Text style={styles.formLabel}>Realizar denúncias de irregularidades</Text>
                 <TextInput
