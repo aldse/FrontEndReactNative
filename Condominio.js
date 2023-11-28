@@ -3,10 +3,9 @@
 // historico das atividades de todos os funcionarios e registro das cameras do porteiro (que pode ser vizualizada apenas pelo sindico)
 // #3F3A35 #7D746B #BDBEBE #B28051
 
-import React from 'react';
-import { Text, Image, View, StyleSheet, TouchableOpacity, Modal, TextInput, Button } from 'react-native';
+import React, { useState } from 'react';
+import { Text, Image, View, StyleSheet, TouchableOpacity, Modal, TextInput, ActivityIndicator } from 'react-native';
 import Logo from './logoapenas.png';
-import Logo2 from './logoapenas2.png';
 import LogoM from './logoapenasmarrom.png';
 import LogoM2 from './logoapenasmarrom2.png';
 import TELA1 from './1.png';
@@ -14,65 +13,54 @@ import TELA2 from './2.png';
 import TELA3 from './3.png';
 import TELA4 from './4.png';
 import logonome from './logonome.png';
-import { useContext, useState } from 'react';
-import { UtilsContext } from "./context";
 import voltar from './voltar.png';
+import axios from 'axios';
 
 export const Condominio = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
   const [cpf, setCPF] = useState('');
   const [senha, setSenha] = useState('');
   const [loading, setLoading] = useState(false);
   const [mensagemErro, setMensagemErro] = useState('');
 
-  const handleLoginSuccess = () => {
-    // Lógica para redirecionar para a página correspondente após o login
-    setLoading(false);
-    setModalVisible(false);
-    // Adicione aqui a lógica para redirecionar para a página correspondente
-  };
-
-  const handleOptionPress = (option) => {
-    setSelectedOption(option);
+  const handleOptionPress = () => {
     setModalVisible(true);
   };
 
   const handleModalClose = () => {
-    // Lógica para fechar o modal
     setModalVisible(false);
   };
+
+  const handleLoginSuccess = () => {
+    setLoading(false);
+    setModalVisible(false);
+
+    // Substitua "Moradores" pelo nome da página desejada após o login
+    props.navigation.navigate("Moradores");
+  };
+
   const handleLogin = async () => {
-    // Aqui você deve fazer a chamada ao seu backend para verificar o CPF e senha
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    // Exemplo de lógica fictícia (substitua com a lógica real)
-    const usuarioAutenticado = await autenticarNoBackend(cpf, senha);
+      const response = await axios.get(`http://localhost:8080/usuario/${cpf}/${senha}`);
 
-    if (usuarioAutenticado) {
-      // Aqui você pode verificar o tipo de usuário no seu banco de dados
-      const tipoUsuario = await obterTipoUsuarioDoBackend(cpf);
+      if (response.data.length > 0) {
+        const usuario = response.data[0];
+        console.log(`Usuário autenticado: ${usuario.nome} - Tipo: ${usuario.tipo}`);
 
-      // Redirecionar para a página correspondente
-      if (tipoUsuario === selectedOption) {
         handleLoginSuccess();
       } else {
-        setMensagemErro('Tipo de usuário não identificado');
-        setTimeout(() => {
-          setModalVisible(false);
-          setLoading(false);
-          setMensagemErro('');
-        }, 3000);
+        setMensagemErro('Usuário ou senha incorretos');
       }
-    } else {
-      // Exibir mensagem de erro se a autenticação falhar
-      setMensagemErro('Usuário ou senha incorretos');
-      setTimeout(() => {
-        setLoading(false);
-        setMensagemErro('');
-      }, 3000);
+    } catch (error) {
+      console.error('Erro ao autenticar usuário:', error);
+      setMensagemErro('Erro ao autenticar usuário');
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => props.navigation.navigate("Cadastro")} style={styles.cadastroButton}>
@@ -162,7 +150,6 @@ export const Condominio = (props) => {
         </View>
       </Modal>
 
-
       <View style={styles.rowOfButtons}>
         <TouchableOpacity onPress={() => props.navigation.navigate("Moradores")} style={[styles.button, { backgroundColor: '#FF5733' }]}>
           <Text style={styles.buttonText}>Morador</Text>
@@ -178,19 +165,16 @@ export const Condominio = (props) => {
         </TouchableOpacity>
       </View>
 
-
       <View style={styles.footer}>
         <View style={styles.retangulo}>
           <Image source={Logo} style={styles.logoFooter1} />
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Suporte</Text>
           </TouchableOpacity>
-          <Image source={Logo2} style={styles.logoFooter2} />
+          <Image source={LogoM2} style={styles.logoFooter2} />
         </View>
       </View>
-
     </View>
-
   );
 };
 

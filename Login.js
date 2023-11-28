@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import Logo from './logoapenas.png';
 import voltar from './voltar.png';
+import axios from 'axios';
 
 const Login = ({ navigation }) => {
   const [cpf, setCPF] = useState('');
@@ -9,35 +10,17 @@ const Login = ({ navigation }) => {
   const [mensagemErro, setMensagemErro] = useState('');
 
   const handleLogin = async () => {
-    // Lógica de autenticação no backend
-    // ...
-
-    // Exemplo de lógica fictícia (substitua com a lógica real)
-    const usuarioAutenticado = await autenticarNoBackend(cpf, senha);
-
-    if (usuarioAutenticado) {
-      // Obter o tipo de usuário do backend
-      const tipoUsuario = await obterTipoUsuarioDoBackend(cpf);
-
-      // Redirecionar para a página correspondente
-      switch (tipoUsuario) {
-        case 'morador':
-          navigation.navigate('Morador');
-          break;
-        case 'condominio':
-          navigation.navigate('Condominio');
-          break;
-        case 'visitante':
-          navigation.navigate('Visitante');
-          break;
-        case 'funcionario':
-          navigation.navigate('Funcionario');
-          break;
-        default:
-          setMensagemErro('Tipo de usuário não identificado');
+    try {
+      const response = await axios.get(`http://localhost:8080/usuario/${cpf}/${senha}`);
+      
+      if (response.data.length > 0) {
+        navigation.navigate('Moradores', { usuario: response.data[0] });
+      } else {
+        setMensagemErro('Usuário ou senha incorretos');
       }
-    } else {
-      setMensagemErro('Usuário ou senha incorretos');
+    } catch (error) {
+      console.error('Erro ao autenticar usuário:', error);
+      setMensagemErro('Erro ao autenticar usuário');
     }
   };
 

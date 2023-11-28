@@ -2,31 +2,41 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Picker, Modal, } from 'react-native';
 import Logo from './logoapenas.png';
 import voltar from './voltar.png';
+import axios from 'axios';
 
 const Cadastro = ({ navigation }) => {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [cpf, setCpf] = useState('');
-  const [tipoUsuario, setTipoUsuario] = useState('morador');
+  const [tipo, setTipoUsuario] = useState('morador');
   const [modalVisible, setModalVisible] = useState(false);
   const [senhaIncorreta, setSenhaIncorreta] = useState(false);
   const senhaRef = useRef('');
 
-  const handleSubmit = () => {
-    console.log('Nome:', nome);
-    console.log('E-mail:', email);
-    console.log('Senha:', senha);
-    console.log('Cpf:', cpf);
-    console.log('Tipo de Usuário:', tipoUsuario);
-
-    if (tipoUsuario === 'condominio' && senha !== '000') {
+  const handleSubmit = async () => {
+    if (tipo === 'condominio' && senha !== '000') {
       setModalVisible(true);
     } else {
-      navigation.navigate('Condominio', { nome, email, senha, cpf, tipoUsuario });
+      navigation.navigate('Condominio', { nome, email, senha, cpf, tipo });
     }
+
+    try {
+      const response = await axios.post("http://localhost:8080/usuario", {
+        nome,
+        email,
+        senha,
+        cpf,
+        tipo:tipo
+      });
+
+      console.log('Resposta da API:', response);
+    } catch (error) {
+      console.error('Erro ao enviar imagem:', error);
+    };
   };
 
+  
   const handleTipoUsuarioChange = (itemValue) => {
     setSenha('');
     setTipoUsuario(itemValue);
@@ -37,7 +47,7 @@ const Cadastro = ({ navigation }) => {
 
   const handleModalClose = () => {
     setModalVisible(false);
-    if (tipoUsuario === 'condominio' && senhaRef.current === '000') {
+    if (tipo === 'condominio' && senhaRef.current === '000') {
       setTimeout(() => {
         setTipoUsuario('condominio');
       }, 3000);
@@ -61,6 +71,8 @@ const Cadastro = ({ navigation }) => {
       }, 2000);
     }
   };
+
+
 
   return (
     <View style={styles.container}>
@@ -106,7 +118,7 @@ const Cadastro = ({ navigation }) => {
       />
 
       <Picker
-        selectedValue={tipoUsuario}
+        selectedValue={tipo}
         style={styles.input}
         onValueChange={handleTipoUsuarioChange}
       >
